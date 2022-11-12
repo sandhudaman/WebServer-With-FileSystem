@@ -19,8 +19,8 @@
 #define VERSION "1.0"
 
 // access credentials for WiFi network.
-const char *ssid = "BELL";
-const char *password = "daman123";
+const char *ssid = "#####";
+const char *password = "######";
 
 // web server hosted internally to the IoT device.  Listen on TCP port 80,
 // which is the default HTTP port.
