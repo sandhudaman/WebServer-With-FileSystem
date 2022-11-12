@@ -1,0 +1,122 @@
+<html>
+<head>
+    <title>Web Server and FileSystem</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .header {
+            background-color: #fff;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tempData {
+            width: fit-content;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            font-size: xx-large;
+
+        }
+        .content{
+            width: 100%;
+            margin: 20 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .content-style{
+            padding: 20px;
+            text-align: left;
+            font-size: large;
+            display: inline-block;
+        }
+        .myChart{
+            width: fit-content;
+            margin: 0 auto;
+            padding: 20px;
+            align-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div>
+            <h1 class="header">Current Temperature</h1>
+            <div>
+                <div>
+                    <p class="tempData">
+                        <span id="temperature">Getting Temp....</span>
+                        <span><sup>&#8728</sup>C</span>
+                        <br>
+                    </p>
+                </div>
+                <div class="myChart">
+                    <div id="myPlot" style="width:100%;max-width:1000px;height:700px"></div>
+                </div>
+                
+            </div>
+            <div class="content" >
+                <div class="content-style">
+                <p><strong>Student Name: </strong>Damanpreet Singh </p>
+                <p><strong>Student Number: </strong>000741359</p>
+                <p><strong>Sensor ID: </strong>
+                    <span id="sensorid"> Getting Data.....</span>
+                </p>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        </script>
+        <script>
+
+            let temp = [25];
+            let time = [5]
+
+            // Interval to update data temperature every 5 seconds
+            const interval = setInterval(function () {
+                // Get data from server
+                fetch('/temperature')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        // Update data temperature
+                        console.log(data);
+                        document.getElementById('temperature').innerHTML = data.temperature;
+                        document.getElementById('sensorid').innerHTML = data.address;
+                        temp.push(data.temperature);
+                        time.push(time[time.length - 1] + 5);
+
+                        console.log(temp);
+                        console.log(time);
+                    });
+                     var data = [{
+                    x: time,
+                    y: temp,
+                    mode: "lines"
+                }];
+
+                // Define Layout
+                var layout = {
+                    xaxis: { range: [5, 300], title: "Time" },
+                    yaxis: { range: [5, 50], title: "Temperature" },
+                    title: "Time in seconds/ Temperature in Celsius"
+                };
+
+
+
+
+                Plotly.newPlot("myPlot", data, layout);
+
+            }, 5000);
+
+           
+        </script>
+</body>
+</html>
